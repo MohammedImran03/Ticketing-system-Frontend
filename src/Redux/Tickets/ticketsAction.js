@@ -6,6 +6,12 @@ import {
   fetchSingleTicketLoading,
   fetchSingleTicketSuccess,
   fetchSingleTicketFail,
+  fetchuserTicketLoading,
+  fetchuserticketlistSuccess,
+  fetchuserTicketFail,
+  fetchmentorTicketLoading,
+  fetchmentorticketlistSuccess,
+  fetchmentorTicketFail,
 } from "./ticketSlice";
 
 import { getAllTickets,getusersAllTickets,getSingleTicket } from "../../api/ticketApi";
@@ -23,14 +29,14 @@ export const fetchAllTickets = () => async (dispatch) => {
 };
 
 export const fetchusersAllTickets = () => async (dispatch) => {
-  dispatch(fetchTicketLoading());
+  dispatch(fetchuserTicketLoading());
   try {
     const result = await getusersAllTickets();
-    // console.log(result);
+    console.log(result);
     result.data.result.length &&
-      dispatch(fetchTicketSuccess(result.data.result));
+      dispatch(fetchuserticketlistSuccess(result.data.result));
   } catch (error) {
-    dispatch(fetchTicketFail(error.message));
+    dispatch(fetchuserTicketFail(error.message));
   }
 };
 
@@ -43,7 +49,7 @@ export const fetchSingleTicket = (_id) => async (dispatch) => {
   dispatch(fetchSingleTicketLoading());
   try {
     const result = await getSingleTicket(_id);
-    console.log(result);
+     console.log(result);
     dispatch(
       fetchSingleTicketSuccess(
         result.data.result.length && result.data.result[0]

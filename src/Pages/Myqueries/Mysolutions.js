@@ -16,7 +16,7 @@ import { Space, Spin } from 'antd';
 // ..
 AOS.init();
 
-export default function Myqueryhistory() {
+export default function Mysolutionhistory() {
   const dispatch = useDispatch();
   const { searchTicketList, isLoading, error } = useSelector((state) => state.tickets);
   const [form, setForm] = useState({});
@@ -27,44 +27,42 @@ export default function Myqueryhistory() {
   const [querynoorder,setquerynoorder]=useState(0);
   const [filteredmyhistorycards, setfilteredmyhistorycards] = useState({});
 
-  useEffect(() => {
-    if (searchTicketList.length === 0) {
-      dispatch(fetchusersAllTickets());
-    } else {
-      setdisplaymyhistorycards(searchTicketList);
-      setfilteredmyhistorycards(searchTicketList);
-      setLatestquery(searchTicketList[searchTicketList.length - 1]);
-      setLatestqueryno(searchTicketList.length);
-      setquerynoorder(searchTicketList.length);
-    }
-  }, [searchTicketList, str, displaymyhistorycards]);
+  // useEffect(() => {
+  //   if (searchTicketList.length === 0) {
+  //     dispatch(fetchusersAllTickets());
+  //   } else {
+  //     // setdisplaymyhistorycards(searchTicketList);
+  //     // setfilteredmyhistorycards(searchTicketList);
+  //     // setLatestquery(searchTicketList[searchTicketList.length - 1]);
+  //     // setLatestqueryno(searchTicketList.length);
+  //     // setquerynoorder(searchTicketList.length);
+  //   }
+  // }, [searchTicketList, str, displaymyhistorycards]);
   function handleInput(e) {
     const { value } = e.target;
     setStr(value);
     if (value == "") {
-      setfilteredmyhistorycards(displaymyhistorycards);
+      // setfilteredmyhistorycards(displaymyhistorycards);
     }
   }
-  // console.log(displaymyhistorycards);
+
   function searchtickets() {
     serchcontent(str);
   }
   function serchcontent(sttr) {
-    const displaytickets = displaymyhistorycards.filter((row) =>
-      row.title.toLowerCase().includes(sttr.toLowerCase())
-    );
-    setfilteredmyhistorycards(displaytickets);
+    // const displaytickets = displaymyhistorycards.filter((row) =>
+    //   row.title.toLowerCase().includes(sttr.toLowerCase())
+    // );
+    // setfilteredmyhistorycards(displaytickets);
   }
   return (
     <>
       {" "}
       <Defaultpage>
         <div className="topcontent d-flex justify-content-between">
-          <div className="div1dashboard text-start">
-            <Link to="/query">
+          <div className="div1dashboard text-start" >
               {" "}
-              <button className="querybuttondashboard">+ Create Query</button>
-            </Link>
+              <button className="querybuttondashboard" disabled style={{border:"none", backgroundColor:"rgb(201, 200, 202)", fontSize:'25px'}}>My Answers </button>
           </div>
           <div class="input-group rounded  searchbardashboard">
             <input
@@ -283,7 +281,7 @@ export default function Myqueryhistory() {
                           fontWeight: "500",
                         }}
                       >
-                        NO Queries Found !
+                        NO Solutions Found !
                       </div>
                       <img
                         src="https://cdn.dribbble.com/users/1785628/screenshots/5605512/media/097297f8e21d501ba45d7ce437ed77bd.gif"
@@ -292,19 +290,6 @@ export default function Myqueryhistory() {
                     </div>
                   </div>
                 )}
-                {/* <Link className="cardslinktab"> <div class="card cradslistsforhistory">
-                        <div className="d-flex justify-content-between">
-  <div class="card-body text-start">
-    <h5 class="card-title">QN37261 - API post by request.</h5>
-    <button type="button" class="cradslistinsidebutton1">Zenclass Doubt</button>
-  </div>
-  <div class="card-body text-end">
-    <h5 class="card-title"> <button type="button" class="cradslistinsidebutton2">Button</button></h5>
-    <p class="card-text">Created Time</p>
-  </div>
-  </div>
-</div>
-</Link> */}
               </div>
             </Grid>
           </Grid>

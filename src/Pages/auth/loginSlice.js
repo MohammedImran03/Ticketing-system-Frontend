@@ -20,6 +20,7 @@ const initialState = {
       },
       loginFail: (state, { payload }) => {
         state.isLoading = false;
+        state.isAuth = false;
         state.error = payload;
       },
     },

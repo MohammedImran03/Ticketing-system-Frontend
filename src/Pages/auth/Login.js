@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import { Button, Form, Input } from "antd";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { message } from "antd";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  loginPending,
-  loginSuccess,
-  loginFail,
-} from "../../Redux/auth/loginSlice";
+import { loginPending, loginSuccess, loginFail } from "./loginSlice";
 import { userLogin } from "../../api/userApi";
+import { getUserProfile } from "../../Redux/auth/userAction";
+import {accessusertologin} from "./loginAction";
 import "./Login.css";
 import AOS from "aos";
 import "aos/dist/aos.css"; // You can also use <link> for styles
@@ -19,32 +18,38 @@ AOS.init();
 
 export default function Loginpage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  let location = useLocation();
   const { isLoading, isAuth, error } = useSelector((state) => state.login);
 
+  // let { from } = location.state || { from: { pathname: "/" } };
+ 
   const onFinish = async (values) => {
     if (!values.email || !values.password) {
-      toast.error("Please Fill the Form and Submit !", {
-        position: toast.POSITION.TOP_CENTER,
-      });
-    }
-    console.log(values);
-    dispatch(loginPending());
-    try {
-      const isAuth = await userLogin(values);
-      console.log(isAuth.message);
-      if (isAuth.status === "error") {
-        return dispatch(loginFail(isAuth.message));
-      }
-      dispatch(loginSuccess());
-      toast.success(isAuth.message, {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      // dispatch(getUserProfile());
-      // history.push("/dashboard");
-    } catch (error) {
-      dispatch(loginFail(error.message));
-    }
+      toast.error('Please Fill the Form and submit!', {
+        position: toast.POSITION.TOP_CENTER
+    });
+		}
+		dispatch(loginPending());
+		try {
+			const isAuth = await userLogin(values);
+			if (isAuth.status === "error") {
+				return dispatch(loginFail(isAuth.message));
+			}
+			dispatch(loginSuccess());
+			dispatch(getUserProfile());
+      message.success("Log In Success");
+      setTimeout(()=>{
+        navigate("/dashboard");
+      },1000);
+			
+		} catch (error) {
+			dispatch(loginFail(error.message));
+		}
   };
+
+
+  
   return (
     <>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -74,6 +79,8 @@ export default function Loginpage() {
             <Form
               initialValues={{
                 remember: true,
+                email: "MERNmentor@gmail.com",
+                password: "mentor12345",
               }}
               onFinish={onFinish}
             >

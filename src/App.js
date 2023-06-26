@@ -9,7 +9,9 @@ import Myqueryhistory from './Pages/Myqueries/Myqueryhistory';
 import Detailedquery from './Pages/Detailedquery/Detailedquery';
 import Userprofile from './Pages/UserProfile/Profile';
 import AdminPanel from './Pages/adminpage/adminpage';
+import Mysolutionhistory from './Pages/Myqueries/Mysolutions';
 import ProtectedRoute from './Private-routes/Privaterouter';
+
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
           <Route path="/forget-password" element={<Forgetpasswordpage />} />
           <Route path="/signup" element={<Register />} />
           <Route path='/myqueries' element={<ProtectedRoute><Myqueryhistory/></ProtectedRoute>}/>
+          <Route path='/mysolutions' element={<ProtectedRoute><Mysolutionhistory/></ProtectedRoute>}/>
           <Route path='/querydetails/:queryid' element={<ProtectedRoute><Detailedquery/></ProtectedRoute>}/>
           <Route path='/userprofile' element={<ProtectedRoute><Userprofile/></ProtectedRoute>}/>
           <Route path='/adminpage' element={<ProtectedRoute><AdminPanel/></ProtectedRoute>}/>          

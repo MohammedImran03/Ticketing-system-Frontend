@@ -18,6 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import dummyjson from '../Myqueries/dummy.json';
 import {fetchSingleTicket} from "../../Redux/Tickets/ticketsAction";
 import {useSelector, useDispatch } from "react-redux";
+import { Space, Spin } from 'antd';
 // ..
 AOS.init();
 
@@ -123,7 +124,9 @@ function validateconfirmation(){
           &lt;&nbsp;&nbsp;<span className="Backbuttoncreatequery">Back&nbsp;&nbsp;</span>
         </button>
       </div>
-  <Grid
+      {isLoading ? <p style={{display:"flex",alignItems:"center",justifyContent:"center",height:"75vh"}}> <Space size="middle">
+    <Spin size="large" />
+  </Space></p>:  <Grid
           container
           // spacing={1}OSED
           item={true}
@@ -229,6 +232,7 @@ function validateconfirmation(){
 </div>
            </div>
               </div>   
+              
             </Grid>
             <Grid item={true} xs={12} sm={12} md={6} lg={6} className="Recentquerygrid">
             <div className="recentqueryviewtab">
@@ -291,7 +295,7 @@ function validateconfirmation(){
               </div>  
               </div>  
             </Grid>
-            </Grid>
+            </Grid> }
 
 {/* Modal */}
 <div class="modal fade" id="appealedModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

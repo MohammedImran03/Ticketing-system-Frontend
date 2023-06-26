@@ -15,7 +15,7 @@ export const getAllTickets = () => {
       try {
         const result = await axios.get(allticketsUrl, {
           headers: {
-            Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Ik1lcm4ubWVudG9yQGdtYWlsLmNvbSIsImlhdCI6MTY4NzMzMjg1OCwiZXhwIjoxNjg3MzMzNzU4fQ.Pn9AxCz6r64Vlxac5iG2Fmjl4oOQ5D8AUsTkhGvgL4U",
+            Authorization: sessionStorage.getItem("accessJWT"),
           },
         }); 
         resolve(result);
@@ -30,7 +30,7 @@ export const getAllTickets = () => {
       try {
         const result = await axios.get(userTicketUrl, {
           headers: {
-            Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Ik1lcm4ubWVudG9yQGdtYWlsLmNvbSIsImlhdCI6MTY4NzMzMjg1OCwiZXhwIjoxNjg3MzMzNzU4fQ.Pn9AxCz6r64Vlxac5iG2Fmjl4oOQ5D8AUsTkhGvgL4U",
+            Authorization: sessionStorage.getItem("accessJWT"),
           },
         }); 
         resolve(result);
@@ -45,7 +45,7 @@ export const getAllTickets = () => {
       try {
         const result = await axios.get(specificticketUrl + _id, {
           headers: {
-            Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Ik1lcm4ubWVudG9yQGdtYWlsLmNvbSIsImlhdCI6MTY4NzMzMjg1OCwiZXhwIjoxNjg3MzMzNzU4fQ.Pn9AxCz6r64Vlxac5iG2Fmjl4oOQ5D8AUsTkhGvgL4U",
+            Authorization: sessionStorage.getItem("accessJWT"),
           },
         });
   
@@ -62,11 +62,28 @@ export const getAllTickets = () => {
       try {
         const result = await axios.get(statusassignUrl + _id, {
           headers: {
-            Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Ik1lcm4ubWVudG9yQGdtYWlsLmNvbSIsImlhdCI6MTY4NzMzMjg1OCwiZXhwIjoxNjg3MzMzNzU4fQ.Pn9AxCz6r64Vlxac5iG2Fmjl4oOQ5D8AUsTkhGvgL4U",
+            Authorization: sessionStorage.getItem("accessJWT"),
           },
         });
   
         resolve(result);
+      } catch (error) {
+        console.log(error.message);
+        reject(error);
+      }
+    });
+  };
+
+  export const createNewTicket = (frmData) => {
+    // console.log("from api", frmData);
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await axios.post(newticketUlr, frmData, {
+          headers: {
+            Authorization: sessionStorage.getItem("accessJWT"),
+          },
+        });
+        resolve(result.data);
       } catch (error) {
         console.log(error.message);
         reject(error);

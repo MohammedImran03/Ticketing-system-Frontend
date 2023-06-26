@@ -2,13 +2,17 @@ import React, {useEffect,useState  } from "react";
 import Defaultpage from "../../Components/Defaultpage";
 import Footertab from "../../Components/Footer";
 import './profile.css';
+import { useSelector, useDispatch } from "react-redux";
+import {useNavigate,Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Space, Spin } from 'antd';
 
 
 export default function Userprofile() {
 
+  const { user,isLoading } = useSelector((state) => state.user);
      
     const [form, setForm] = useState({});
     function handleInput(e) {
@@ -28,8 +32,18 @@ export default function Userprofile() {
             console.log(form);
           }      
     }
+    const navigate = useNavigate();
+    const goBack = () => {
+      navigate(-1);
+    };
+
 return( <><Defaultpage>
-    User Profile
+  <div style={{display:"flex",justifyContent:"start", margin:"5px"}}><button onClick={goBack} style={{color:"blueviolet",border:"2px solid blueviolet",borderRadius:"7px",padding:"5px",marginLeft:"10px",backgroundColor:"white",fontSize:"20px",fontWeight:"500"}}>&lt;&nbsp;&nbsp;Back&nbsp;&nbsp;</button></div>
+   <div style={{color:"blue",fontSize:"30px"}}>User Profile</div> 
+   {isLoading ? <><p style={{display:"flex",alignItems:"center",justifyContent:"center",height:"75vh"}}> <Space size="middle">
+    <Spin size="large" color="red" />
+  </Space></p></> : 
+   <div>
     <div style={{display:"flex",justifyContent:"center"}}>
     <div class="jumbotron3">
       <div style={{margin: "2%"}}>
@@ -37,32 +51,34 @@ return( <><Defaultpage>
       <p style={{margin:"1px", fontSize:"18px",color: "blue", fontWeight:400, display:"flex", alignItems:"center", marginLeft:"5px"}}>Name: </p>
     <TextField
                   required
-                  id="name"
+                  id="firstname"
                   type="text"
-                  name="name"
+                  name="firstname"
                   sx={{
                     display: "flex",
                     width: "80%",
                     m:2,
                     fontSize: 40
                   }}
-                  value={form && form["name"]}
+                  value={form && form["firstname"]}
                   onChange={handleInput}
+                  defaultValue={user.firstname}
                 /></div>
                 <div className="d-flex justify-content-between"> 
       <p style={{margin:"1px", fontSize:"18px",color: "blue", fontWeight:400, display:"flex", alignItems:"center", marginLeft:"5px"}}>Phone No: </p>
     <TextField
                   required
-                  id="mobileno"
+                  id="mobile"
                   type="text"
-                  name="mobileno"
+                  name="mobile"
                   sx={{
                     display: "flex",
                     width: "80%",
                     m:2,
                     fontSize: 40
                   }}
-                  value={form && form["mobileno"]}
+                  value={form && form["mobile"]}
+                  defaultValue={user.mobile}
                   onChange={handleInput}
                 /></div>
                 <div className="d-flex justify-content-between"> 
@@ -80,6 +96,7 @@ return( <><Defaultpage>
                   }}
                   disabled
                   value={form && form["email"]}
+                  defaultValue={user.email}
                   onChange={handleInput}
                 /></div>
                 <div className="d-flex justify-content-between"> 
@@ -96,15 +113,13 @@ return( <><Defaultpage>
                     m:2,
                     fontSize: 40
                   }}
+                  defaultValue="Batch is not yet allocated"
                   value={form && form["batch"]}
                   onChange={handleInput}
                 /></div>
 </div>
 
 </div>
-
-
-
 </div>
 
 <div style={{display:"flex",justifyContent:"center"}}>
@@ -189,6 +204,7 @@ return( <><Defaultpage>
     <div style={{display:"flex", justifyContent:"end", alignItems:"center", margin:"2%"}}><button style={{backgroundColor:"blue",border:"none",borderRadius:"5px", color:"white",fontSize:"25px", fontWeight:"500",padding:"1%"}} onClick={validatetextboxes}>Save Changes</button></div>
 </div>
 </div>
+</div> }
 <ToastContainer/>
 </Defaultpage>
 <Footertab/>

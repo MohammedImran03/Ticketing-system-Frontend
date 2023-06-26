@@ -5,25 +5,54 @@ import './query.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useNavigate,Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import {BsPlusSquare} from 'react-icons/bs';
+import {AiOutlineExclamationCircle}  from "react-icons/ai";
+import {message} from "antd";
 import AOS from "aos";
-import "aos/dist/aos.css"; // You can also use <link> for styles
 import MultiSelect from 'react-multiple-select-dropdown-lite';
 import  'react-multiple-select-dropdown-lite/dist/index.css';
+import {openNewTicket} from "./addTicketAction";
+import {createNewTicket} from '../../api/userApi';
+import {restSuccessMSg} from "./addTicketSlicer";
+import "aos/dist/aos.css"; // You can also use <link> for styles
 // ..
 AOS.init();
 
 export default function Createquery() {
       const tags=['html','css','javaScript','React','node js','mongodb','JS','browser','DOM','HTTP methods','array','Json','Objects','hoisting','Scopeblock','functions','Xml HTTP request','API request','IIFE','Arrow Functions','anonymous Functions','Destructuring','es5','es6','array Destructure','this Keyword','OOPS','array methods','forms','css Selector','box modal','media query','bootstrap','Rwd','callback','callback hell','promise','fetch api','async','await','MySql','Frontend','Backend'];
     const tagsoptions = [];
-   
+    const dispatch = useDispatch();
+    // const {
+    //   user: { name },
+    // } = useSelector((state) => state.user);
+    const { isLoading,error,successMsg } = useSelector((state) => state.openticket);
+  
+
+    useEffect(() => {
+      return () => {
+        successMsg && dispatch(restSuccessMSg());
+      };
+    }, [dispatch]);
+    // category
+    // subCategory
+    // tags
+    // preferredLanguage
+    // title
+    // description
+    // availableTimefrom
+    // availableTimetill
+    // file
+    // rasiedBy
+
+
 for (let i = 0; i < tags.length; i++) {
   tagsoptions.push({
     value: tags[i],
     label: tags[i],
   });
 }
-const [tagvalue, settagvalue] = useState([])
+const [tagvalue, settagvalue] = useState()
 
   const  handleOnchange  =  val  => {
       settagvalue(val);
@@ -35,6 +64,7 @@ const [tagvalue, settagvalue] = useState([])
     const [form, setForm] = useState({});
     const [image, Setimage] = useState(false);
     function handleInput(e) {
+      e.preventDefault();
       if (e) {
         const formCopy = {
           ...form,
@@ -74,16 +104,33 @@ const [tagvalue, settagvalue] = useState([])
               position: toast.POSITION.TOP_CENTER
           });
           }
-          if(form.category && form.preferredLanguage && form.title && form.description && form.availableTimefrom && form.availableTimetill){
-            toast.success('Your Query has been Submitted, wait for our reply', {
-                  position: toast.POSITION.TOP_CENTER
-              });
+          // if(form.category && form.preferredLanguage && form.title && form.description && form.availableTimefrom && form.availableTimetill){
+            if(tagvalue){
               form.tags=tagvalue;
+            }
             console.log(form);
-          }
+            dispatch(openNewTicket(form));          
+          // }
+         message.warning('Please, wait untill mentor to take up this query!')
+  setTimeout(()=>{
+    window.location.href="/myqueries";
+  },3000);
+        
+
     }
 
+    // if(error){
+    //   toast.error(`${error}`, {
+    //     position: toast.POSITION.TOP_CENTER
+    // });
+    // }
+    // if(successMsg){
+    //   toast.success(`${successMsg}`, {
+    //     position: toast.POSITION.TOP_CENTER
+    // });
+    // }
 return( <><Defaultpage>
+ 
  <div className="divcreatequery text-start">
         <button onClick={goBack} className="backbutton buttonavigate ">
           &lt;&nbsp;&nbsp;<span className="Backbuttoncreatequery">Back&nbsp;&nbsp;</span>
@@ -94,6 +141,10 @@ return( <><Defaultpage>
       <div class="jumbotron2">
       <h6 class="display-6">List your queries here.</h6>
   <hr></hr>
+  {successMsg && <div class="alert alert-success" role="alert">
+  {successMsg}
+</div>
+}
               <div className="textfields">
        <div className="text-start ml-2 topicnames">Topic</div>
  
@@ -130,6 +181,7 @@ return( <><Defaultpage>
 <div className="labelnames2">Tags <MultiSelect className='multipleselect'
         onChange={handleOnchange}
         options={tagsoptions}
+        style={{width:"100%"}}
       /></div>
   </>
  : ''
@@ -242,9 +294,7 @@ Change File
 <BsPlusSquare className="fileuploadicon"/>
 </button></div> }
 <ToastContainer/>
-  <div><button className="createproductbutton"  onClick={validatetextboxes}>Create Product</button></div>
-
-       
+  <div className="text-end m-3">{error&&<><AiOutlineExclamationCircle style={{marginRight:"2px", color:"red",fontSize:"22px"}}/></>}<button className="createproductbutton"   onClick={validatetextboxes} disabled={error} style={{border:"none",color:"white",backgroundColor:"blueviolet",padding:"5px",margin:"10px",borderRadius:"5px",fontSize:"22px",fontWeight:"500"}}><span>Create Query</span></button></div>
   </div>
 </div>
       </div>

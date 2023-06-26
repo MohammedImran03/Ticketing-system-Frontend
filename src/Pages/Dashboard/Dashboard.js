@@ -7,9 +7,10 @@ import {AiOutlineSearch} from 'react-icons/ai';
 import {BiSearchAlt2} from 'react-icons/bi';
 
 export default function Dashboard() {
-return( <Defaultpage>
-     
-      
+return( 
+    <Defaultpage>
+   
+
 </Defaultpage>);
 
 }

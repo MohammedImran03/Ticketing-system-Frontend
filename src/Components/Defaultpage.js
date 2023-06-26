@@ -3,21 +3,33 @@ import "./Defaultpage.css";
 import logo from '../images/designlogo.png';
 import Avatar from "@mui/material/Avatar";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Link} from 'react-router-dom';
+import {Link,useNavigate} from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
 import {HiOutlineLogout} from 'react-icons/hi';
 import {HiBarsArrowDown} from 'react-icons/hi2';
 import {CgProfile} from 'react-icons/cg';
 import { AiFillRightCircle } from "react-icons/ai";
 import {IoIosNotifications} from 'react-icons/io';
 import { blue } from "@mui/material/colors";
+import {userLogout} from "../api/userApi";
+import { message } from 'antd';
 
 export default function Defaultpage(props) {
 
   const [isOpen, setIsOpen] = React.useState(false);
-    // const user = JSON.parse(localStorage.getItem('user'));
+  const { user } = useSelector((state) => state.user);
+    const navigate = useNavigate();
+
+    const logMeOut = () => {
+      sessionStorage.removeItem("accessJWT");
+      localStorage.removeItem("QueryTicketingSystem");
+      userLogout();
+      message.success("Logged Out");
+      navigate("/");
+    };
+
   return (
     <>
-
 <nav class="navbar navbar-expand-lg navbar-light headersection">
 
   <div class="container-fluid">
@@ -48,8 +60,9 @@ export default function Defaultpage(props) {
           <a class="nav-link" href="#">Home</a></Link>
         </li>
         <li class="nav-item">
-          <Link to='/myqueries' className="linktopages">
-          <a class="nav-link" href="#">My Queries</a></Link>
+        {user.role == "mentor"?<><Link to='/mysolutions' className="linktopages">
+          <a class="nav-link" href="#">My solutions</a></Link></>:<><Link to='/myqueries' className="linktopages">
+          <a class="nav-link" href="#">My Queries</a></Link></>}
         </li>
         <li class="nav-item">
           <Link to='/adminpage' className="linktopages">
@@ -108,7 +121,7 @@ export default function Defaultpage(props) {
             <a class="dropdown-item" href="#">My profile</a></Link>
           </li>
           <li>
-            <a class="dropdown-item" href="#">Logout</a>
+            <a class="dropdown-item" href="#"  onClick={logMeOut}>Logout</a>
           </li>
         </ul>
       </div>
