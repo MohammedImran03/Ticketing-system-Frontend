@@ -4,7 +4,7 @@ const initialState = {
   user: {},
   isLoading: false,
   error: "",
-  isUser:false,
+  isUser: false,
 };
 
 const userSlice = createSlice({
@@ -17,12 +17,12 @@ const userSlice = createSlice({
     getUserSuccess: (state, { payload }) => {
       state.isLoading = false;
       state.user = payload;
-      state.isUser=true,
+      state.isUser = true;
       state.error = "";
     },
     getUserFail: (state, { payload }) => {
       state.isLoading = false;
-      state.isUser=false,
+      state.isUser = false;
       state.error = payload;
     },
   },
