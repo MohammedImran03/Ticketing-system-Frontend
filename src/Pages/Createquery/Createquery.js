@@ -28,7 +28,6 @@ export default function Createquery() {
     // } = useSelector((state) => state.user);
     const { isLoading,error,successMsg } = useSelector((state) => state.openticket);
   
-
     useEffect(() => {
       return () => {
         successMsg && dispatch(restSuccessMSg());
@@ -104,31 +103,21 @@ const [tagvalue, settagvalue] = useState()
               position: toast.POSITION.TOP_CENTER
           });
           }
-          // if(form.category && form.preferredLanguage && form.title && form.description && form.availableTimefrom && form.availableTimetill){
+          else{
             if(tagvalue){
               form.tags=tagvalue;
             }
-            console.log(form);
-            dispatch(openNewTicket(form));          
-          // }
+
+            dispatch(openNewTicket(form));  
+          }          
          message.warning('Please, wait untill mentor to take up this query!')
   setTimeout(()=>{
     window.location.href="/myqueries";
-  },3000);
+  },2000);
         
-
     }
 
-    // if(error){
-    //   toast.error(`${error}`, {
-    //     position: toast.POSITION.TOP_CENTER
-    // });
-    // }
-    // if(successMsg){
-    //   toast.success(`${successMsg}`, {
-    //     position: toast.POSITION.TOP_CENTER
-    // });
-    // }
+
 return( <><Defaultpage>
  
  <div className="divcreatequery text-start">
@@ -142,7 +131,7 @@ return( <><Defaultpage>
       <h6 class="display-6">List your queries here.</h6>
   <hr></hr>
   {successMsg && <div class="alert alert-success" role="alert">
-  {successMsg}
+ {successMsg}
 </div>
 }
               <div className="textfields">

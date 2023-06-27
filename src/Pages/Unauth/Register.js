@@ -2,13 +2,13 @@ import React, {useState} from "react";
 import { Grid } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import "./Register.css";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import logo from '../../images/designlogo.png';
+import { message } from "antd";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import { useDispatch,useSelector } from "react-redux";
-// import {userRegister} from '../Redux/actions/userActions';
-// import CircularIndeterminate from '../Components/Componentsloader';
+import {newUserRegistration} from "./RegisterAction";
+import { useDispatch, useSelector } from "react-redux";
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // You can also use <link> for styles
 // ..
@@ -17,8 +17,11 @@ AOS.init();
 export default function Register() {
 
   const [form, setForm] = useState({});
-  // const dispatch=useDispatch();
-  // const {loading} = useSelector((state)=>state.alertsreducer);
+  const dispatch=useDispatch();
+  const { isLoading, status, response } = useSelector(
+    (state) => state.registration
+  );
+  const navigate=useNavigate();
 
   function handleInput(e) {
     if (e) {
@@ -29,17 +32,20 @@ export default function Register() {
       setForm(formCopy);
     }
   }
-  // console.log(form);
 
-  function validatetextboxes(){
-    // dispatch(userRegister(form))
+function validatetextboxes() {
     if(!form.firstname && !form.email && !form.mobile && !form.password ){
       toast.error('Fill the Registeration Credential and Submit', {
         position: toast.POSITION.TOP_CENTER
     });
     }
-    else if(!form.firstname){
+    if(!form.firstname){
       toast.warning('Please Fill your First Name !', {
+        position: toast.POSITION.TOP_CENTER
+    });
+    }
+    else if(form.firstname.length<3){
+      toast.warning('Name must be greater than 3 characters!', {
         position: toast.POSITION.TOP_CENTER
     });
     }
@@ -53,8 +59,18 @@ export default function Register() {
         position: toast.POSITION.TOP_CENTER
     });
     }
+    else if(form.mobile.length>10){
+      toast.error('Please fill valid Mobile number !', {
+        position: toast.POSITION.TOP_CENTER
+    });
+    }
     else if(!form.password){
       toast.warning('Set Your Password !', {
+        position: toast.POSITION.TOP_CENTER
+    });
+    }
+    if(!form.role){
+      toast.warning('Please Select your Role', {
         position: toast.POSITION.TOP_CENTER
     });
     }
@@ -63,15 +79,30 @@ export default function Register() {
         position: toast.POSITION.TOP_CENTER
     });
     }
-    if(form.firstname && form.lastname && form.email && form.mobile && form.password==form.confirmpassword){
-      console.log(form);
+    if(response=="Password pattern doesn't match"){
+      toast.warning('Password should contain alphabets a-z & number 0-9', {
+        position: toast.POSITION.TOP_CENTER
+    });
     }
+    if(response=="Email id already Exist cannot sign in with the same Email id"){
+      toast.warning('Email id already exists choose different Email account', {
+        position: toast.POSITION.TOP_CENTER
+    });
+    }
+    if(form.firstname.length>3 && form.lastname && form.email && form.mobile.length<11 && form.password==form.confirmpassword && form.role){
+      dispatch(newUserRegistration(form));
+    }    
+      if(response=="User Created Successfully!!!"){
+        message.success("Registered Successfully");
+        setTimeout(()=>{
+          navigate("/");
+        },1500);
+      }
   }
 
   return (
     <>
       <div className="Register">
-      {/* {loading && (<CircularIndeterminate/>) } */}
         <Grid container spacing={1.5} item={true} sx={{ p: 5, justify: "Center" }}>
           <Grid
           data-aos="zoom-in"
@@ -103,6 +134,7 @@ export default function Register() {
           >
             <h3 className="text-start Registername">Register</h3>
             <hr></hr>
+
               <div className="">
                 <TextField
                   required
@@ -131,6 +163,14 @@ export default function Register() {
                   value={form && form["email"]}
                   onChange={handleInput}
                 />
+                <div style={{margin:"1%",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                  <div style={{fontSize:"18px",fontWeight:"500"}}>Select Your Role:</div>
+                <select  name="role" className=" text-center"
+                id="role" value={form && form["role"]} onChange={handleInput} style={{width:"100%",height:"50px"}}>
+                    <option disabled selected value>--select Role--</option>
+    <option value="student">Student</option>
+    <option value="mentor">Mentor</option>
+  </select></div>
                 <TextField
                 required
                   id="mobile"
@@ -171,11 +211,13 @@ export default function Register() {
                   onChange={handleInput}
                 />
                 <p className="d-flex justify-content-between">
-                  <p className="text-start loginbutton_register"><Link className="anchorlink" to="/Login">
-                <span className="anchorlinkname">Log in</span>
+                  <p className="text-start loginbutton_register"><Link className="anchorlink" to="/">
+                <span className="anchorlinkname">Log in...</span>
               </Link></p>
                 <p className="text-end Registerbutton">
-                  <button onClick={validatetextboxes} type="button" class="btn btn-primary Registerbutton">Register</button>
+                  <button onClick={validatetextboxes} type="button" class="btn btn-primary Registerbutton" disabled={!form.firstname && !form.email && !form.mobile && !form.password}>{isLoading ? <div class="spinner-border text-light" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>:<>Register</>}</button>
                 </p></p>
                 <ToastContainer />
               </div>

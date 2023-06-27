@@ -3,12 +3,13 @@ import Defaultpage from "../../Components/Defaultpage";
 import "./admin.css";
 import { getUserProfile } from "../../Redux/auth/userAction";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAllTickets } from "../../Redux/Tickets/ticketsAction";
+import { Button, message, Popconfirm } from "antd";
+import { fetchAllTickets,AssignTickettomentor } from "../../Redux/Tickets/ticketsAction";
 
 export default function AdminPanel() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const { tickets, isLoading, error } = useSelector((state) => state.tickets);
+  const { tickets, isLoading, error,ticketstatus } = useSelector((state) => state.tickets);
   const [form, setForm] = useState({});
   const [filteredvalue, setfilteredvalue] = useState("");
   const [filteredstatus, setfilteredstatus] = useState("");
@@ -128,6 +129,7 @@ export default function AdminPanel() {
                 <option value="CLOSED">closed</option>
                 <option value="UNASSIGNED">UnAssigned</option>
               </select>
+
             </div>
             <div>
               <div>
@@ -163,12 +165,13 @@ export default function AdminPanel() {
               </div>
             </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
+         
+          <div style={{ display: "flex", justifyContent: "center",alignItems:"center" }}>
+          {isLoading ? <><div class="spinner-border text-primary" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div></>:<>     
             <div className="jumbotron6">
               <div style={{ margin: "2%" }}>
-                {error ? (
-                  <h3>{error}</h3>
-                ) : (
                   <table class="table" style={{ border: "1px solid black" }}>
                     <thead className="bg-dark">
                       <tr>
@@ -184,7 +187,9 @@ export default function AdminPanel() {
                     <tbody>
                       {/* Loop here */}
                       {displaycards &&
-                        filteredcards.map((val) => {
+                        filteredcards.slice(0)
+                        .reverse()
+                        .map((val) => {
                           return (
                             <tr>
                               <th scope="row">{val.rasiedBy}</th>
@@ -200,8 +205,15 @@ export default function AdminPanel() {
                                       {val.status}
                                     </div>
                                     <div>
-                                      <button
-                                        style={{
+                                    <Popconfirm
+                          title="Confirmation Required !"
+                          description="Let Assign take is query to you ?"
+                          onConfirm={() =>{dispatch(AssignTickettomentor(val._id))}}
+                          // onConfirm={()=>{dispatch(deleteProduct({Productid:cards._id}))}}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <button style={{
                                           background: "blue",
                                           border: "1px solid violet",
                                           color: "white",
@@ -209,9 +221,10 @@ export default function AdminPanel() {
                                           borderRadius: "10px",
                                           fontWeight: "300",
                                         }}
+                                      //  onClick={() =>{dispatch(AssignTickettomentor(val._id))}}
                                       >
-                                        Take Query
-                                      </button>
+                                        Take Query</button>
+                        </Popconfirm>
                                     </div>{" "}
                                   </>
                                 ) : val.status == "ASSIGNED" ? (
@@ -246,11 +259,11 @@ export default function AdminPanel() {
                           );
                         })}
                     </tbody>
-                  </table>
-                )}
+                  </table>                    
               </div>
             </div>
-          </div>
+            </>}
+          </div>     
         </>
       ) : (
         <div

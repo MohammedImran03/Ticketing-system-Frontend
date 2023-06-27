@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import {BiUserCircle} from 'react-icons/bi';
 
 export default function MessageHistory({ msg,currentuser }){
-    // console.log(msg);
+    // console.log(msg,currentuser);
   if (!msg || !currentuser) return null;
 
   function showdatetime(value){
@@ -23,11 +23,8 @@ export default function MessageHistory({ msg,currentuser }){
        <div className="messagetabclientandoperator">{row.message&& row.message}</div>
        <div>{row.file&& <img src={row.file} style={{width:"150px",height:"150px"}}></img> }</div>
        {/* <div>{(row.file&&row.message) <img src={row.file} style={{width:"150px",height:"150px"}}></img> }</div> */}
-       {row.sender}
-<div>
-  <span>{showdatetime(row.msgAt)}</span>
-{/* <span>{row.msgAt && row.msgAt.split('T')[1].split('.')[0]}</span> */}
-{/* <span>{row.msgAt && row.msgA.split('T')[0]}</span> */}
+<div style={{fontSize:"15px"}}>
+  <span>{row.msgAt&& showdatetime(row.msgAt)}</span>
 </div>
       </div>
       </div>   
@@ -36,10 +33,12 @@ export default function MessageHistory({ msg,currentuser }){
        <> 
       <div>
          <div style={{padding:"6px"}} className="Messageatleftside">
-            <div className="messagetabclientandoperator">{row.message&& <span>row.message</span>}</div>
-            <div>{row.file&& <img src={row.file} style={{width:"150px",height:"150px"}}></img> }</div>
-                      {row.sender}
-                  {row.date}</div>
+            <div className="messagetabclientandoperator">{row.message&& <span>{row.message}</span>}</div>
+            <div>{row.file&& <img src={row.file} style={{width:"150px",height:"150px"}}></img> }
+            </div>
+                  <div style={{fontSize:"15px"}}>
+  <span>{row.msgAt&& showdatetime(row.msgAt)}</span>
+</div></div>
                   </div>
       </> }  
       </> : null}     

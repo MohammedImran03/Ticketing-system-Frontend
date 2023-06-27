@@ -1,11 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 const initialState = {
     isLoading: false,
     isAuth: false,
     error: "",
   };
-
   const loginSlice = createSlice({
     name: "login",
     initialState,

@@ -9,7 +9,6 @@ import "./Myqueryhistory.css";
 import data from "./dummy.json";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  filterSerachTicket,
   fetchusersAllTickets,
 } from "../../Redux/Tickets/ticketsAction";
 import { Space, Spin } from 'antd';
@@ -19,7 +18,6 @@ AOS.init();
 export default function Myqueryhistory() {
   const dispatch = useDispatch();
   const { searchTicketList, isLoading, error } = useSelector((state) => state.tickets);
-  const [form, setForm] = useState({});
   const [str, setStr] = useState("");
   const [displaymyhistorycards, setdisplaymyhistorycards] = useState({});
   const [latestquery, setLatestquery] = useState({});
@@ -28,7 +26,7 @@ export default function Myqueryhistory() {
   const [filteredmyhistorycards, setfilteredmyhistorycards] = useState({});
 
   useEffect(() => {
-    if (searchTicketList.length === 0) {
+    if (searchTicketList.length == 0) {
       dispatch(fetchusersAllTickets());
     } else {
       setdisplaymyhistorycards(searchTicketList);
@@ -136,7 +134,7 @@ export default function Myqueryhistory() {
                   </div>
                   <div className="createdattimedate p-2">
                     <h5>Assigned to:</h5>
-                    <span>{latestquery.assignedTo}</span>
+                    <span>{latestquery.assignedmentorname}</span>
                   </div>
                 </div>
                 <div className="recenttabtopicnames text-start">
@@ -292,19 +290,6 @@ export default function Myqueryhistory() {
                     </div>
                   </div>
                 )}
-                {/* <Link className="cardslinktab"> <div class="card cradslistsforhistory">
-                        <div className="d-flex justify-content-between">
-  <div class="card-body text-start">
-    <h5 class="card-title">QN37261 - API post by request.</h5>
-    <button type="button" class="cradslistinsidebutton1">Zenclass Doubt</button>
-  </div>
-  <div class="card-body text-end">
-    <h5 class="card-title"> <button type="button" class="cradslistinsidebutton2">Button</button></h5>
-    <p class="card-text">Created Time</p>
-  </div>
-  </div>
-</div>
-</Link> */}
               </div>
             </Grid>
           </Grid>

@@ -10,6 +10,7 @@ import Detailedquery from './Pages/Detailedquery/Detailedquery';
 import Userprofile from './Pages/UserProfile/Profile';
 import AdminPanel from './Pages/adminpage/adminpage';
 import Mysolutionhistory from './Pages/Myqueries/Mysolutions';
+import Detailedformentorquery from './Pages/Detailedquery/querydetailsformentor';
 import ProtectedRoute from './Private-routes/Privaterouter';
 
 
@@ -26,6 +27,7 @@ function App() {
           <Route path='/myqueries' element={<ProtectedRoute><Myqueryhistory/></ProtectedRoute>}/>
           <Route path='/mysolutions' element={<ProtectedRoute><Mysolutionhistory/></ProtectedRoute>}/>
           <Route path='/querydetails/:queryid' element={<ProtectedRoute><Detailedquery/></ProtectedRoute>}/>
+          <Route path='/querychatdetails/:queryid' element={<ProtectedRoute><Detailedformentorquery/></ProtectedRoute>}/>
           <Route path='/userprofile' element={<ProtectedRoute><Userprofile/></ProtectedRoute>}/>
           <Route path='/adminpage' element={<ProtectedRoute><AdminPanel/></ProtectedRoute>}/>          
         </Routes>

@@ -4,11 +4,15 @@ const initialState = {
     tickets: [],
     isLoading: false,
     error: "",
-    // replyTicketError: "",
+    ticketstatus:false,
+    ticketstatusmsg:"",
+    replyTicketError: "",
     searchTicketList: [],
     mentorTicketList:[],
     selectedTicket: {},
-    // replyMsg: "",
+    mentorTicket:{},
+    replyMsg: "",
+    ticketreply:false,
   };
 
 const ticketListSlice = createSlice({
@@ -60,13 +64,61 @@ const ticketListSlice = createSlice({
         state.isLoading = true;
       },
       fetchmentorticketlistSuccess: (state, { payload }) => {
-        state.searchTicketList = payload;
+        state.mentorTicketList = payload;
         state.isLoading = false;
         state.error = "";
       },
       fetchmentorTicketFail: (state, { payload }) => {
         state.isLoading = false;
         state.error = payload;
+      },
+      fetchSinglementorTicketLoading: (state) => {
+        state.isLoading = true;
+      },
+      fetchSinglementorTicketSuccess: (state, { payload }) => {
+        state.mentorTicket = payload;
+        state.isLoading = false;
+        state.error = "";
+      },
+      fetchSinglementorTicketFail: (state, { payload }) => {
+        state.isLoading = false;
+        state.error = payload;
+      },
+      upsatestatusTicketLoading: (state) => {
+        state.ticketstatus = true;
+      },
+      upsatestatusTicketSuccess: (state, { payload }) => {
+        state.ticketstatus = false;
+        state.error = "";
+        state.replyMsg = payload;
+      },
+      upsatestatusTicketFail: (state, { payload }) => {
+        state.ticketstatus = false;
+        state.error = payload;
+      },
+      closeTicketLoading: (state) => {
+        state.ticketstatus = true;
+      },
+      closeTicketSuccess: (state, { payload }) => {
+        state.ticketstatus = false;
+        state.error = "";
+        state.ticketstatusmsg = payload;
+      },
+      closeTicketFail: (state, { payload }) => {
+        state.ticketstatus = false;
+        state.error = payload;
+      },
+      replyTicketLoading: (state) => {
+        state.ticketreply = true;
+      },
+      replyTicketSuccess: (state, { payload }) => {
+        state.ticketreply = false;
+        state.error = "";
+        state.replyMsg = payload;
+      },
+      replyTicketFail: (state, { payload }) => {
+        state.ticketreply = false;
+        state.replyTicketError = payload;
       },
  },
   });
@@ -87,6 +139,18 @@ const ticketListSlice = createSlice({
   fetchmentorTicketLoading,
   fetchmentorticketlistSuccess,
   fetchmentorTicketFail,
+  fetchSinglementorTicketLoading,
+  fetchSinglementorTicketSuccess,
+  fetchSinglementorTicketFail,
+  upsatestatusTicketLoading,
+  upsatestatusTicketSuccess,
+  upsatestatusTicketFail,
+  replyTicketLoading,
+  replyTicketSuccess,
+  replyTicketFail,
+  closeTicketLoading,
+closeTicketFail,
+closeTicketSuccess,
   } = actions;
   
   export default reducer;

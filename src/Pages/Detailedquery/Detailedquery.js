@@ -15,15 +15,14 @@ import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import dummyjson from '../Myqueries/dummy.json';
-import {fetchSingleTicket} from "../../Redux/Tickets/ticketsAction";
+import {fetchSingleTicket,replyOnTicket,closeTicket} from "../../Redux/Tickets/ticketsAction";
 import {useSelector, useDispatch } from "react-redux";
-import { Space, Spin } from 'antd';
+import { Space, Spin} from 'antd';
 // ..
 AOS.init();
 
 export default function Detailedquery(){
-  let user='student';
+  // let user='student';
   var { queryid } = useParams();
   const navigate = useNavigate();
   const goBack = () => {
@@ -33,25 +32,18 @@ export default function Detailedquery(){
   const [solution, setSolution] = useState({});
   const [image, Setimage] = useState(false);
   const [readfile, setReadfile] = useState('');
-  // const [selectedTicket,setselectedTicket]=useState({});
-  const [conversations,setConversations]=useState([]);
   const [ratings, setratings] = useState(0);
   const dispatch=useDispatch();
-  const {selectedTicket,isLoading,error}=useSelector((state) => state.tickets);
+  const {selectedTicket,isLoading,error,replyMsg,ticketreply,replyTicketError,ticketstatus,ticketstatusmsg}=useSelector((state) => state.tickets);
+  const { user } = useSelector((state) => state.user);
   useEffect(()=>{
-    // if (!selectedTicket) {
       dispatch(fetchSingleTicket(queryid));
-    // } else {
-      // setselectedTicket(selectedTicket);
-      // setfilteredcards(tickets);
-    // }  
   }, []);
 
 //   function handleChangeimagefile(e) {
 //     console.log(e.target.files);
 //     setReadfile(URL.createObjectURL(e.target.files[0]));
 // }
-// let checking=selectedTicket.status;
   function handleInput(e) {
     if (e) {
       const formCopy = {
@@ -59,7 +51,6 @@ export default function Detailedquery(){
         [e.target.id]: e.target.value,
       };
       // console.log(e.target.files);
-      // if(f)
       // setReadfile(URL.createObjectURL(e.target.files[0]));
       setForm(formCopy);
     }
@@ -75,26 +66,27 @@ export default function Detailedquery(){
     }
   }
 
-
   function validatetextboxes(){
-document.getElementById('message').value=null;
-    form.sender='dummy';
-    if(readfile){
-      form.file=readfile;
-    }
-       if(form.message || form.file){
-        console.log(form);
-        console.log(form.file,form.message,form.sender);
-       }
-           setForm({});
-           form.sender=null;
-           form.file=null;
-           Setimage(false)
-           setReadfile('');
-  }
+    document.getElementById('message').value=null;
+        form.sender=user._id;
+        form.msgAt=new Date().toJSON();
+        if(readfile){
+          form.file=readfile;
+        }
+           if(form.message || form.file){
+            console.log(form);
+            dispatch(replyOnTicket(selectedTicket._id,form))
+           }
+               setForm({});
+               form.sender=null;
+               form.file=null;
+               form.msgAt=null;
+               Setimage(false)
+               setReadfile('');
+      }
 
 function validateconfirmation(){
-  if(solution.solutionanswer.length<15){
+  if(solution.solution.length<15){
     toast.error('Your Solution must be atleast 15 characters maximum', {
       position: toast.POSITION.TOP_CENTER
   });
@@ -104,15 +96,11 @@ function validateconfirmation(){
       position: toast.POSITION.TOP_CENTER
   });
   }
-  if(ratings){
-    solution.rating=ratings;
-  }
-  if(solution.solutionanswer.length>15 && ratings){
-    toast('Query is Closed', {
-      position: toast.POSITION.TOP_CENTER
-  });
-  console.log(solution);  
-    document.getElementById('solutionanswer').value=null;
+  if(solution.solution.length>15 && ratings){
+  solution.rating=ratings.toString();
+  // console.log(solution);  
+  dispatch(closeTicket(selectedTicket._id,solution));
+    document.getElementById('solution').value=null;
     setratings(0);
   }
 }
@@ -135,12 +123,15 @@ function validateconfirmation(){
             <Grid item={true} xs={12} sm={12} md={6} lg={6} className="Recentquerygrid">
              <div className="querychattab">
            <div className="querychattabinside">
+
             <div className="text-end querytobuttonview">           
  {/* Button when query is closed*/}
             {selectedTicket.status=='CLOSED' && <button className='querycheckingbuttoninside' disabled>closed</button>} 
 {/* Button when query is un Assigned*/}  
 {selectedTicket.status=='UNASSIGNED' &&  <><button className='queryprocessingbuttoninside' disabled>un Assigned</button>
-           <button className='queryappealsolvedbuttoninside'>Appeal Solved</button></> }          
+           <button className='queryappealsolvedbuttoninside'>{ticketstatus?<><div class="spinner-border text-primary" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div></>:<span>Appeal Solved</span>}</button></> }          
 {/* Button when query is Assigned*/}            
 {selectedTicket.status=='ASSIGNED' &&  <>
 <button className='queryprocessingbuttoninside' disabled>Assigned</button>
@@ -149,7 +140,7 @@ function validateconfirmation(){
 
 {/* Top tab when closed*/}
     {selectedTicket.status=='CLOSED' && <div className="querychatboxstudentmentor1">
-    {selectedTicket.conversations.length>0?<MessageHistory msg={selectedTicket.conversations} currentuser={user}/>:<div className="verticallycenteredmsg2" style={{color:"red",fontSize:"25px"}}>Query was Closed with out messages.
+    {selectedTicket.conversations.length>0?<MessageHistory msg={selectedTicket.conversations} currentuser={user._id}/>:<div className="verticallycenteredmsg2" style={{color:"red",fontSize:"25px"}}>Query was Closed with out messages.
  </div> }</div>}
 
 {/* Top tab when unAssigned*/}
@@ -161,8 +152,17 @@ function validateconfirmation(){
 
 {/* Top tab when Assigned*/}  
 
- {selectedTicket.status=='ASSIGNED' && <div className="querychatboxstudentmentorassigned">
- {selectedTicket.conversations? <MessageHistory msg={selectedTicket.conversations} currentuser={user}/>:<div className="verticallycenteredmsg" style={{color:"blue",fontSize:"25px"}}>No Message history
+{selectedTicket.status=='ASSIGNED' && <div className="querychatboxstudentmentorassigned">
+ {ticketreply ? <div className="verticallycenteredmsg"><div class="spinner-border text-primary" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div></div> : <>
+ {selectedTicket.conversations? <>
+    <div> {replyTicketError && <div className="text-start" style={{display:"inline-block",width:"50%",}} data-aos="fade-down"><div class="alert alert-danger text-center" role="alert">
+ {replyTicketError}
+</div></div>} {replyMsg && <div className="text-start" style={{display:"inline-block",width:"50%"}} data-aos="fade-down"><div class="alert alert-success text-center" role="alert">
+ {replyMsg}
+</div></div>}</div>
+ <MessageHistory msg={selectedTicket.conversations} currentuser={user._id}/></>:<div className="verticallycenteredmsg" style={{color:"blue",fontSize:"25px"}}>No Message history
  </div>}
 
  {readfile && image ? <div className="d-flex messagetabtosendmessage"> <div className="fileuploadimagediv text-end"><img src={readfile} className="fileimageinmessage"></img> <div className="changefile">
@@ -170,7 +170,8 @@ function validateconfirmation(){
             Setimage(false);
             setReadfile('');
             form.file=null;
-          }}>X</button></div> </div></div>  : " " }
+   }}>X</button></div> </div></div>  : " " }
+</>}
  </div>}
 
 {/* Bottom tab closed */}
@@ -180,7 +181,7 @@ function validateconfirmation(){
           <div class=" d-flex justify-content-between" style={{marginLeft:"5px",fontSize:"18px",color:"blue"}}>feed back
   <div className="d-flex justify-content-between"></div>
   <div className="text-end ratingsdivtab">
-       {[...Array(selectedTicket.rating)].map(() => {        
+       {[...Array(+selectedTicket.rating)].map(() => {        
         return (     
           <AiFillStar/>          
         );
@@ -237,7 +238,7 @@ function validateconfirmation(){
             <Grid item={true} xs={12} sm={12} md={6} lg={6} className="Recentquerygrid">
             <div className="recentqueryviewtab">
             <div className="recentqueryviewtabinside">
-          <div className="qeurytitlecard text-start m-3">QueryNo {selectedTicket._id}: {selectedTicket.title}</div>
+          <div className="qeurytitlecard text-start m-3">Title: {selectedTicket.title}</div>
           <div className="hrlinebreakrecentquery"><hr></hr></div>
           <div className="selectedTicketinrecenttab">
           <Grid
@@ -250,7 +251,7 @@ function validateconfirmation(){
             <div style={{fontSize: "18px",marginTop:"3px"}}>{selectedTicket.createdAt && selectedTicket.createdAt.split('T')[0]}</div>
             </div></Grid>
             <Grid item={true} xs={6} sm={6} md={6} lg={6} className="text-start"><div className="recentquerytabinsideright"><div style={{color: "rgb(126,142,159)", fontSize: "20px"}}>Assigned To:</div>
-            <div style={{fontSize: "18px",marginTop:"3px"}}>{selectedTicket.status=='UNASSIGNED'? <span>Mentor is not assigned yet...</span>:<span>{selectedTicket.assignedTo}</span>}</div></div></Grid>
+            <div style={{fontSize: "18px",marginTop:"3px"}}>{selectedTicket.status=='UNASSIGNED'? <span>Mentor is not assigned yet...</span>:<span>{selectedTicket.assignedmentorname}</span>}</div></div></Grid>
             </Grid>
             <div className="text-start" style={{color: "rgb(126,142,159)", fontSize: "20px", marginTop:"5px", marginLeft:"5px"}}>Description:</div>
             <div className="text-start" style={{ fontSize: "18px", marginTop:"3px", marginLeft:"5px"}}>{selectedTicket.description}</div>
@@ -310,9 +311,9 @@ function validateconfirmation(){
       <div class="modal-body">
         <div style={{textAlign:"start",fontSize:"20px", color:"blue"}}>  Enter your solution to appeal this as solved</div>
       <div style={{textAlign:"start",fontSize:"18px", color:"grey"}}>Solution : </div>
-      <textarea name="solutionanswer"
-                id="solutionanswer"
-                value={solution && solution["solutionanswer"]}
+      <textarea name="solution"
+                id="solution"
+                value={solution && solution["solution"]}
                  placeholder="Enter the Solution" className="modaltextarea"  rows="5" cols="40" onChange={handlesolution} ></textarea>
                <div><BsExclamationOctagon style={{fontSize:"25px", color:"red", marginRight:"2px"}}/> The Characters should be minimum of 15 and maximum of 900.</div> 
                <Box
@@ -328,12 +329,20 @@ function validateconfirmation(){
           setratings(newValue);
         }}
       /></Box>
+      {error && <div><div class="alert alert-danger" role="alert">
+  {error}
+</div></div>}
+{ticketstatusmsg && <div class="alert alert-success" role="alert">
+  {ticketstatusmsg}
+</div> }
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary"  disabled={!solution.solutionanswer}
+        <button type="button" class="btn btn-primary"  disabled={!solution.solution}
         onClick={validateconfirmation}
-        >Confirm</button>
+        >{ticketstatus?<><div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div></>:<span>Confirm</span>}</button>
       </div>
     </div>
   </div>
