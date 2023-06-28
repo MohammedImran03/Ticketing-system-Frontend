@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState,useEffect} from "react";
 import "./Defaultpage.css";
 import logo from '../images/designlogo.png';
 import Avatar from "@mui/material/Avatar";
@@ -13,12 +13,15 @@ import {IoIosNotifications} from 'react-icons/io';
 import { blue } from "@mui/material/colors";
 import {userLogout} from "../api/userApi";
 import { message } from 'antd';
-
+import {fetchusersAllTickets} from "../Redux/Tickets/ticketsAction";
 export default function Defaultpage(props) {
 
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(true);
   const { user } = useSelector((state) => state.user);
+  const { searchTicketList, isLoading, error  } = useSelector((state) => state.tickets);
+  const [latestquery, setLatestquery] = useState({});
     const navigate = useNavigate();
+    const dispatch=useDispatch();
 
     const logMeOut = () => {
       sessionStorage.removeItem("accessJWT");
@@ -28,6 +31,14 @@ export default function Defaultpage(props) {
       navigate("/");
     };
 
+
+    useEffect(() => {
+      if (searchTicketList.length == 0) {
+        dispatch(fetchusersAllTickets());
+      } else {
+        setLatestquery(searchTicketList[searchTicketList.length - 1]);
+      }
+    }, [searchTicketList]);
   return (
     <>
 <nav class="navbar navbar-expand-lg navbar-light headersection">
@@ -83,20 +94,14 @@ export default function Defaultpage(props) {
           data-bs-toggle="dropdown"
           aria-expanded="false"
         ><IoIosNotifications className="icondefault"/>
-          <span class="badge rounded-pill badge-notification bg-danger">1</span>
+        {isOpen && <span class="badge rounded-pill badge-notification bg-danger">1</span> }
         </a>
         <ul
           class="dropdown-menu dropdown-menu-end"
           aria-labelledby="navbarDropdownMenuLink"
         >
-          <li>
-            <a class="dropdown-item" href="#">Some news</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Another news</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Something else here</a>
+          <li><Link to='/myqueries' style={{textDecoration:"none"}} onClick={()=>{setIsOpen(false);}}>
+            <a class="dropdown-item" href="#">{user.role=="student"?<span>{latestquery.status=="ASSIGNED"?<span>Your Query assigned to {latestquery.assignedmentorname}</span>:<span>Your Last Query is not taken by Mentor</span>}</span>:<span>You have latest message</span>}</a></Link>
           </li>
         </ul>
       </div>

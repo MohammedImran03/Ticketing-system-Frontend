@@ -6,6 +6,8 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./Myqueryhistory.css";
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchmentorsAllTickets,
@@ -75,6 +77,16 @@ export default function Mysolutionhistory() {
     });
     setfilteredmyhistorycards(displaytickets);
   }
+
+  const getsumofratings = () => {
+    let sum = 0;
+    for (let i = 0; i < displaymyhistorycards.length; i++) {
+      sum +=Number(displaymyhistorycards[i].rating);
+    }
+    let total =`${sum} / ${displaymyhistorycards.length*5}`;
+    return total ;
+  }
+
   return (
     <>
       {" "}
@@ -83,6 +95,14 @@ export default function Mysolutionhistory() {
           <div className="div1dashboard text-start" >
               {" "}
               <button className="querybuttondashboard" disabled style={{border:"none", backgroundColor:"rgb(201, 200, 202)", fontSize:'25px'}}>My Solutions </button>
+              <div className="querybuttondashboard1" style={{fontSize:"15px"}}><div class="dropdown">
+  <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style={{border:"none", backgroundColor:"rgb(201, 200, 202)", fontSize:'15px',color:"blue"}}>
+   My feedback Ratings
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item" href="#">Overall rating : {getsumofratings()}</a></li>
+  </ul>
+</div></div>
           </div>
           <div class="input-group rounded  searchbardashboard">
             <input
@@ -182,16 +202,18 @@ export default function Mysolutionhistory() {
                         <td>{val.title}</td>
                         <td>{val.availableTimefrom} - {val.availableTimetill}</td>
                         <td>{val.status}</td>
-                        <td>{val.rating}</td>
+                        <td>{val.rating=='0'?<>-</>:<>
+                        <Box
+      sx={{
+        '& > legend': { mt: 2 },
+      }}><Rating name="read-only" value={val.rating} readOnly /></Box></>}</td>
                         <td><Link
                     style={{ textDecoration: "none" }}
                     to={`/querychatdetails/${val._id}`}
                   ><button className="gotoquerybutton" style={{fontSize:"15px",padding:"2px",border:"2px solid white"}}>View query</button></Link></td>
                       </tr>
-                      );
-                    
+                      );                   
                     })}
-
   </tbody>
 </table>
                </>) : (

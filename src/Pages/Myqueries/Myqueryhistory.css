@@ -13,6 +13,20 @@
     margin-left: 2%;
     justify-content: center;
 }
+.querybuttondashboard1{
+    /* border: 1px solid blue; */
+    border-radius: 3px;
+    background-color: white;
+    color: blue;
+    font-weight: 500;
+    font-size: 1.3rem;
+    margin-top: 1%;
+    margin-left: 2%;
+    justify-content: center;
+    display: inline-block;
+}
+
+
 .searchbardashboard{
     justify-content: end;
     width: 50%;
