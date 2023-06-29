@@ -8,9 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {HiOutlineLogout} from 'react-icons/hi';
 import {HiBarsArrowDown} from 'react-icons/hi2';
 import {CgProfile} from 'react-icons/cg';
-import { AiFillRightCircle } from "react-icons/ai";
 import {IoIosNotifications} from 'react-icons/io';
-import { blue } from "@mui/material/colors";
 import {userLogout} from "../api/userApi";
 import { message } from 'antd';
 import {fetchusersAllTickets} from "../Redux/Tickets/ticketsAction";
@@ -114,19 +112,21 @@ export default function Defaultpage(props) {
           role="button"
           data-bs-toggle="dropdown"
           aria-expanded="false"
-        >
-         <Avatar className="icondefault"/>
+          style={{textDecoration:"none"}}
+        ><span style={{color:"black",fontSize:"20px",marginRight:"5px"}}>{user.firstname}</span>
+          <Avatar className="icondefault"></Avatar>
         </a>
         <ul
           class="dropdown-menu dropdown-menu-end"
           aria-labelledby="navbarDropdownMenuAvatar"
+          style={{backgroundColor:"rgb(189,189,189)"}}
         >
           <li>
             <Link to='/userprofile' style={{textDecoration:"none"}}>
-            <a class="dropdown-item" href="#">My profile</a></Link>
+            <a class="dropdown-item" href="#"><CgProfile style={{fontSize:"25px",marginRight:"5px"}}/> <span style={{fontSize:"20px",color:"black"}}>My profile</span></a></Link>
           </li>
           <li>
-            <a class="dropdown-item" href="#"  onClick={logMeOut}>Logout</a>
+            <a class="dropdown-item" href="#"  onClick={logMeOut}><HiOutlineLogout style={{fontSize:"25px",marginRight:"8px"}}/><span style={{fontSize:"20px",color:"black"}}>Logout</span></a>
           </li>
         </ul>
       </div>

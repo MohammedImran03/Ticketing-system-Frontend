@@ -4,6 +4,7 @@ import './Dashboard.css';
 import Grid from "@mui/material/Grid";
 import LineChart from './Linechart';
 import Barchart from './Barchart';
+import PieChart from "./piechart";
 
 export default function Dashboard() {
 return( 
@@ -21,7 +22,7 @@ return(
             </Grid>
              </Grid>
              <div className="bottomtabchart">
-            <div className="dashboardleftpart2"><h5 style={{color:"blue"}}>Our Queries Solving Count day by day</h5><div><Barchart/></div> </div></div>
+            <div className="dashboardleftpart2"><h5 style={{color:"blue"}}>Our Queries Solving Count day by day</h5><div><PieChart/></div> </div></div>
 
 </Defaultpage>);
 
