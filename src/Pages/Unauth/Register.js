@@ -80,7 +80,7 @@ function validatetextboxes() {
     });
     }
     if(response=="Password pattern doesn't match"){
-      toast.warning('Password should contain alphabets a-z & number 0-9', {
+      toast.warning('Password length should contain 8 characters with alphabets a-z & number 0-9', {
         position: toast.POSITION.TOP_CENTER
     });
     }

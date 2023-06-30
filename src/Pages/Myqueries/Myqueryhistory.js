@@ -62,8 +62,10 @@ export default function Myqueryhistory() {
             <Link to="/query">
               {" "}
               <button className="querybuttondashboard">+ Create Query</button>
-            </Link>
+            </Link>           
           </div>
+          {searchTicketList.length == 0 && <div style={{color:"red",fontSize:"18px",fontWeight:"500"}}>! Your query history is empty</div>}
+          
           <div class="input-group rounded  searchbardashboard">
             <input
               id="searchbar"
@@ -86,6 +88,7 @@ export default function Myqueryhistory() {
             </span>
           </div>
         </div>
+
 {isLoading ?<><p style={{display:"flex",alignItems:"center",justifyContent:"center",height:"75vh"}}> <Space size="middle">
     <Spin size="large" />
   </Space></p></> : <>
@@ -293,7 +296,8 @@ export default function Myqueryhistory() {
               </div>
             </Grid>
           </Grid>
-        </div> </> }
+        </div> 
+        </> }
       </Defaultpage>
     </>
   );

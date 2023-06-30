@@ -207,7 +207,7 @@ export default function AdminPanel() {
                                     <div>
                                     <Popconfirm
                           title="Confirmation Required !"
-                          description="Let Assign take is query to you ?"
+                          description="Do you want to attend this query?"
                           onConfirm={() =>{dispatch(AssignTickettomentor(val._id))}}
                           // onConfirm={()=>{dispatch(deleteProduct({Productid:cards._id}))}}
                           okText="Yes"

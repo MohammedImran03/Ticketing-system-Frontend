@@ -110,7 +110,7 @@ const [tagvalue, settagvalue] = useState()
 
             dispatch(openNewTicket(form));  
           }          
-         message.warning('Please, wait untill mentor to take up this query!')
+         message.success('Your query is registered, Please wait untill mentor to take up this query!')
   setTimeout(()=>{
     window.location.href="/myqueries";
   },2000);
