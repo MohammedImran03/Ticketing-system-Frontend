@@ -2,6 +2,7 @@ import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Loginpage from './Pages/auth/Login';
 import Forgetpasswordpage from './Pages/auth/ForgetPassword';
+import Resetpasswordpage from './Pages/auth/ResetPassword';
 import Register from './Pages/Unauth/Register';
 import Createquery from './Pages/Createquery/Createquery';
 import Dashboard from './Pages/Dashboard/Dashboard';
@@ -14,6 +15,7 @@ import Detailedformentorquery from './Pages/Detailedquery/querydetailsformentor'
 import ProtectedRoute from './Private-routes/Privaterouter';
 
 
+
 function App() {
   return (
     <div className="App">
@@ -23,6 +25,7 @@ function App() {
           <Route path="/query" element={ <ProtectedRoute><Createquery /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/forget-password" element={<Forgetpasswordpage />} />
+          <Route path='/reset-password' element={<Resetpasswordpage/>}/>
           <Route path="/signup" element={<Register />} />
           <Route path='/myqueries' element={<ProtectedRoute><Myqueryhistory/></ProtectedRoute>}/>
           <Route path='/mysolutions' element={<ProtectedRoute><Mysolutionhistory/></ProtectedRoute>}/>
