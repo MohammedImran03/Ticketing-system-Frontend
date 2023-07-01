@@ -13,9 +13,6 @@ export const sendPasswordResetOtp = email => async dispatch => {
 		const { status, message } = await reqPasswordOtp(email);
 		if (status === "success") {
 			return dispatch(otpReqSuccess({ message, email }));
-			setTimeout(() => {
-				window.location.href="/reset-password";
-			  }, 3000);
 		}
 		dispatch(otpReqFail(message));
 	} catch (error) {
@@ -29,9 +26,6 @@ export const updatePassword = frmData => async dispatch => {
 		const { status, message } = await updateUserPassword(frmData);
 		if (status === "success") {
 			return dispatch(updatePassSuccess(message));
-			setTimeout(() => {
-				window.location.href="/";
-			  }, 3000);
 		}
 		dispatch(otpReqFail(message));
 	} catch (error) {

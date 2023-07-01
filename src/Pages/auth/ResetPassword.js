@@ -68,9 +68,9 @@ export default function Resetpasswordpage() {
     //   console.log(newPassObj);
       dispatch(updatePassword(newPassObj));
       message.success("Your Password is updated Successfully");
-      // setTimeout(() => {
-      //   navigate("/");
-      // }, 5000);
+      setTimeout(() => {
+        navigate("/");
+      }, 5000);
         }
 
 

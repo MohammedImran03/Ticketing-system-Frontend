@@ -17,9 +17,9 @@ export default function Forgetpasswordpage() {
     if (values.email) {
       dispatch(sendPasswordResetOtp(values.email));
       message.success("We have sent a 6 digit otp to your Email id");
-      // setTimeout(() => {
-      //   navigate("/reset-password");
-      // }, 5000);
+      setTimeout(() => {
+        navigate("/reset-password");
+      }, 5000);
     }
   };
   return (
