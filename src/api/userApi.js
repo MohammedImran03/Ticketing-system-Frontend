@@ -13,7 +13,7 @@ export const userLogin = (frmData) => {
       const res = await axios.post(userloginapi, frmData);
       resolve(res.data);
       if (res.data.status === "success") {
-        console.log(res.data);
+        // console.log(res.data);
         sessionStorage.setItem("accessJWT", res.data.accessJWT);
         localStorage.setItem(
           "QueryTicketingSystem",
@@ -54,7 +54,7 @@ export const fetchUser = () => {
         });  
         resolve(res.data);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         reject(error.message);
       }
     });

@@ -68,7 +68,7 @@ export const getAllTickets = () => {
   
         resolve(result);
       } catch (error) {
-        console.log(error.message);
+        // console.log(error.message);
         reject(error);
       }
     });
@@ -85,7 +85,7 @@ export const getAllTickets = () => {
   
         resolve(result);
       } catch (error) {
-        console.log(error.message);
+        // console.log(error.message);
         reject(error);
       }
     });
@@ -101,7 +101,7 @@ export const getAllTickets = () => {
         });
         resolve(result);
       } catch (error) {
-        console.log(error.message);
+        // console.log(error.message);
         reject(error);
       }
     });
@@ -118,7 +118,7 @@ export const getAllTickets = () => {
         });
         resolve(result.data);
       } catch (error) {
-        console.log(error.message);
+        // console.log(error.message);
         reject(error);
       }
     });
@@ -139,7 +139,7 @@ export const getAllTickets = () => {
   
         resolve(result.data);
       } catch (error) {
-        console.log(error.message);
+        // console.log(error.message);
         reject(error);
       }
     });
@@ -174,7 +174,7 @@ export const getAllTickets = () => {
         );  
         resolve(result.data);
       } catch (error) {
-        console.log(error.message);
+        // console.log(error.message);
         reject(error);
       }
     });
